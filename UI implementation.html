@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SM PBL - Linear Congruential Problem</title>
+  <style>
+    body {
+      font-family: "Poppins", sans-serif;
+      background: linear-gradient(135deg, #2a2a72, #009ffd);
+      color: white;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      transition: background 0.5s ease-in-out;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .slide {
+      display: none;
+      max-width: 700px;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(10px);
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    .active {
+      display: block;
+    }
+
+    button {
+      background: white;
+      color: #009ffd;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      font-size: 1rem;
+      border-radius: 10px;
+      cursor: pointer;
+      margin: 1rem 0.3rem;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      background: #009ffd;
+      color: white;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+      color: white;
+    }
+
+    table, th, td {
+      border: 1px solid rgba(255, 255, 255, 0.5);
+    }
+
+    th, td {
+      padding: 8px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <h1>SM PBL – Linear Congruential Problem</h1>
+
+  <div id="slides">
+    <div class="slide active">
+      <h2>Introduction</h2>
+      <p>The Linear Congruential Generator (LCG) is one of the oldest and simplest methods for generating pseudo-random numbers using a recurrence relation.</p>
+      <p><b>Formula:</b> X<sub>i+1</sub> = (aX<sub>i</sub> + c) mod m</p>
+    </div>
+
+    <div class="slide">
+      <h2>Problem Statement</h2>
+      <p>Generate a sequence of random numbers using the LCG method with parameters:</p>
+      <p>a = 5, c = 3, m = 16, X₀ = 7</p>
+    </div>
+
+    <div class="slide">
+      <h2>Steps to Solve</h2>
+      <ol style="text-align:left; display:inline-block;">
+        <li>Start with the seed X₀ = 7</li>
+        <li>Use the formula: X<sub>i+1</sub> = (aX<sub>i</sub> + c) mod m</li>
+        <li>Repeat until sequence repeats</li>
+      </ol>
+    </div>
+
+    <div class="slide">
+      <h2>Calculations</h2>
+      <table id="calcTable">
+        <tr><th>i</th><th>X<sub>i</sub></th><th>R<sub>i</sub> = X<sub>i</sub>/m</th></tr>
+      </table>
+    </div>
+
+    <div class="slide">
+      <h2>Validation (Hull–Dobell Theorem)</h2>
+      <ul style="text-align:left; display:inline-block;">
+        <li>gcd(c, m) = gcd(3,16) = 1 ✅</li>
+        <li>(a−1) = 4 divisible by all prime factors of m (2) ✅</li>
+        <li>m = 16 is multiple of 4 → (a−1)=4 is multiple of 4 ✅</li>
+      </ul>
+      <p>Hence, the generator achieves a full period of m = 16 ✅</p>
+    </div>
+
+    <div class="slide">
+      <h2>Conclusion</h2>
+      <p>The LCG method successfully generated a full-period pseudo-random sequence. This implementation validates theoretical conditions using the Hull–Dobell theorem.</p>
+    </div>
+  </div>
+
+  <div>
+    <button id="prev">◀ Previous</button>
+    <button id="next">Next ▶</button>
+  </div>
+
+  <script>
+    const slides = document.querySelectorAll(".slide");
+    let current = 0;
+
+    document.getElementById("next").addEventListener("click", () => {
+      slides[current].classList.remove("active");
+      current = (current + 1) % slides.length;
+      slides[current].classList.add("active");
+    });
+
+    document.getElementById("prev").addEventListener("click", () => {
+      slides[current].classList.remove("active");
+      current = (current - 1 + slides.length) % slides.length;
+      slides[current].classList.add("active");
+    });
+
+    // LCG Calculation Table
+    const a = 5, c = 3, m = 16, X0 = 7;
+    let Xi = X0;
+    const table = document.getElementById("calcTable");
+
+    for (let i = 0; i < 16; i++) {
+      const Ri = (Xi / m).toFixed(4);
+      const row = `<tr><td>${i}</td><td>${Xi}</td><td>${Ri}</td></tr>`;
+      table.innerHTML += row;
+      Xi = (a * Xi + c) % m;
+    }
+  </script>
+</body>
+</html>
